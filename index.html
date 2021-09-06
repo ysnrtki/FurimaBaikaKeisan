@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=11;IE=EDGE">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>フリマ売価計算</title>
+<link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP" rel="stylesheet">
+<script src="./assets/vendors/jquery/jquery-3.3.1.min.js?v=20210904"></script>
+<script src="./assets/vendors/popper/popper.min.js?v=20210904"></script>
+<link href="./assets/vendors/bootstrap/css/bootstrap.min.css?v=20210904" rel="stylesheet">
+<script src="./assets/vendors/bootstrap/js/bootstrap.min.js?v=20210904"></script>
+<link href="./assets/style.css?v=20210904" rel="stylesheet">
+<script src="./assets/script.js?v=20210904"></script>
+</head>
+<div class="container-fluid m-0 px-4 py-5" style="width: 100%;">
+	<div class="text-center" style="font-size: 1.5rem;">フリマ売価計算</div>
+	<form class="mt-5">
+		<hr>
+		<div class="form-group row mt-2 mb-0">
+			<label class="col-5 col-form-label">メルカリ</label>
+			<div class="col-7">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<div class="input-group-text px-0" style="width: 32px">
+							<div class="mx-auto">¥</div>
+						</div>
+					</div>
+					<input type="text" name="メルカリ" class="form-control price" inputmode="numeric">
+				</div>
+			</div>
+		</div>
+		<div class="form-group row mt-2 mb-0">
+			<label class="col-5 col-form-label">ラクマ</label>
+			<div class="col-7">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<div class="input-group-text px-0" style="width: 32px">
+							<div class="mx-auto">¥</div>
+						</div>
+					</div>
+					<input type="text" name="ラクマ" class="form-control price" inputmode="numeric">
+				</div>
+			</div>
+		</div>
+		<div class="form-group row mt-2 mb-0">
+			<label class="col-5 col-form-label">ヤフオク</label>
+			<div class="col-7">
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<div class="input-group-text px-0" style="width: 32px">
+							<div class="mx-auto">¥</div>
+						</div>
+					</div>
+					<input type="text" name="ヤフオク" class="form-control price" inputmode="numeric">
+				</div>
+			</div>
+		</div>
+		<hr>
+	</form>
+	<div class="mt-5 text-center" style="font-size: 1rem;">Yoshinori Takai</div>
+</div>
+</html>
