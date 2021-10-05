@@ -41,6 +41,7 @@
         });
     }).filter(":first").blur();
     $inputs.filter(":not(.form-control-plaintext)").on("focus", function () {
+        $(this).val(toNumber($(this).val()));
         this.select();
     });
 });
