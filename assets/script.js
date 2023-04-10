@@ -29,6 +29,7 @@
             "メルカリ": 0.1,
             "ラクマ": 0.06 * 1.1,
             "ヤフオク": 0.08 * 1.1,
+            "PayPayフリマ": 0.05,
         };
         const basePrice = toNumber($(this).val()) * (1 - fees[$(this).attr("name")]);
         Object.keys(fees).forEach(key => $inputs.filter(`[name='${key}']`).val(basePrice / (1 - fees[key])));
