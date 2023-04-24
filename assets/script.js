@@ -1,47 +1,48 @@
 ﻿$(() => {
-    const $inputs = $("form input[name]");
+    const $fields = $("form input[name]");
+    const fees = {
+        "メルカリ": 0.1,
+        "ラクマ": 0.066, // 0.06 * 1.1
+        "ヤフオク 送料込": 0.088, // 0.08 * 1.1
+        "ヤフオク 送料別": 0.088, // 0.08 * 1.1
+        "PayPayフリマ": 0.05,
+    };
+    $fields.toArray().forEach(input => {
+        const fee = fees[$(input).attr("name")];
+        if (fee) {
+            const $label = $(input).closest(".form-group").find("label");
+            $label.text(`${$label.text()} (${fee})`);
+        }
+    });
     const toNumber = text => ((text || "") + "").replace(/−/g, "-").replace(/[^0-9\.\-]/g, "") * 1;
     const formatAllNumbers = () => {
-        $inputs.toArray().forEach(input => {
+        $fields.toArray().forEach(input => {
             let formattedNumber = formatNumber(Math.round(toNumber($(input).val())));
-            if ($(input).hasClass("rate")) {
-                let number = toNumber($(input).val());
-                if (number != 0) {
-                    number = Math.round(number * 1000000) / 1000000;
-                }
-                formattedNumber = formatNumber(number, 6);
-                if (formattedNumber.includes(".")) {
-                    formattedNumber = formattedNumber.replace(/0+$/, "").replace(/\.$/, "");
-                }
-                formattedNumber = `${number > 0 ? "+" : ""}${formattedNumber}`;
-            }
             formattedNumber = formattedNumber.replace(/^[\+\-]0$/, "0");
             $(input).val(formattedNumber);
-            if ($(input).hasClass("form-control-plaintext")) {
-                $(input).val(`${$(input).hasClass("price") ? "¥" : ""}${formattedNumber}${$(input).hasClass("rate") ? "%" : ""}`);
-            }
         });
     };
-    $inputs.filter(":not(.form-control-plaintext)").toArray().forEach(input => $(input).val(localStorage.getItem($(input).attr("name"))));
-    $inputs.filter(":not(.form-control-plaintext)").on("blur", function () {
+    $fields.toArray().forEach(input => $(input).val(localStorage.getItem($(input).attr("name"))));
+    $fields.on("blur", function () {
         formatAllNumbers();
-        const fees = {
-            "メルカリ": 0.1,
-            "ラクマ": 0.06 * 1.1,
-            "ヤフオク": 0.08 * 1.1,
-            "PayPayフリマ": 0.05,
-        };
-        const basePrice = toNumber($(this).val()) * (1 - fees[$(this).attr("name")]);
-        Object.keys(fees).forEach(key => $inputs.filter(`[name='${key}']`).val(basePrice / (1 - fees[key])));
-        formatAllNumbers();
-        $inputs.filter(":not(.form-control-plaintext)").toArray().forEach(input => localStorage.setItem($(input).attr("name"), $(input).val()));
-        $inputs.filter(".form-control-plaintext").toArray().forEach(input => {
-            $(input).next(".col-form-label").remove();
-            $(input).after($("<div class='col-form-label' />").text($(input).val()));
-            $(input).hide();
+        const $shippingChargeField = $fields.filter("[name='送料']");
+        const shippingCharge = toNumber($shippingChargeField.val());
+        const $baseInput = $(this).is($shippingChargeField) ? $fields.filter(`[name!='${$shippingChargeField.attr("name")}']:first`) : $(this);
+        const fee = fees[$baseInput.attr("name")];
+        const basePrice = toNumber($baseInput.val()) * (1 - fee) + ($baseInput.hasClass("送料別") ? shippingCharge : 0);
+        Object.keys(fees).forEach(key => {
+            const $field = $fields.filter(`[name='${key}']`);
+            if ($field.hasClass("送料込")) {
+                $field.val(basePrice / (1 - fees[key]));
+            }
+            if ($field.hasClass("送料別")) {
+                $field.val((basePrice - shippingCharge) / (1 - fees[key]));
+            }
         });
+        formatAllNumbers();
+        $fields.toArray().forEach(input => localStorage.setItem($(input).attr("name"), $(input).val()));
     }).filter(":first").blur();
-    $inputs.filter(":not(.form-control-plaintext)").on("focus", function () {
+    $fields.on("focus", function () {
         $(this).val(toNumber($(this).val()));
         this.select();
     });

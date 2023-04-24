@@ -15,63 +15,90 @@
 <script src="./assets/script.js?v=20211005"></script>
 </head>
 <div class="container-fluid m-0 px-4 py-5" style="width: 100%;">
-	<div class="text-center" style="font-size: 1.5rem;">フリマ売価計算</div>
-	<form class="mt-5">
-		<hr>
-		<div class="form-group row mt-2 mb-0">
-			<label class="col-5 col-form-label">メルカリ</label>
-			<div class="col-7">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<div class="input-group-text px-0" style="width: 32px">
-							<div class="mx-auto">¥</div>
-						</div>
-					</div>
-					<input type="text" name="メルカリ" class="form-control price" inputmode="numeric">
-				</div>
-			</div>
-		</div>
-		<div class="form-group row mt-2 mb-0">
-			<label class="col-5 col-form-label">ラクマ</label>
-			<div class="col-7">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<div class="input-group-text px-0" style="width: 32px">
-							<div class="mx-auto">¥</div>
-						</div>
-					</div>
-					<input type="text" name="ラクマ" class="form-control price" inputmode="numeric">
-				</div>
-			</div>
-		</div>
-		<div class="form-group row mt-2 mb-0">
-			<label class="col-5 col-form-label">ヤフオク</label>
-			<div class="col-7">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<div class="input-group-text px-0" style="width: 32px">
-							<div class="mx-auto">¥</div>
-						</div>
-					</div>
-					<input type="text" name="ヤフオク" class="form-control price" inputmode="numeric">
-				</div>
-			</div>
-		</div>
-		<div class="form-group row mt-2 mb-0">
-			<label class="col-5 col-form-label">PayPayフリマ</label>
-			<div class="col-7">
-				<div class="input-group">
-					<div class="input-group-prepend">
-						<div class="input-group-text px-0" style="width: 32px">
-							<div class="mx-auto">¥</div>
-						</div>
-					</div>
-					<input type="text" name="PayPayフリマ" class="form-control price" inputmode="numeric">
-				</div>
-			</div>
-		</div>
-		<hr>
-	</form>
-	<div class="mt-5 text-center" style="font-size: 1rem;">Yoshinori Takai</div>
+    <div class="text-center" style="font-size: 1.5rem;">フリマ売価計算</div>
+    <form class="mt-5">
+        <hr>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-5 col-form-label">メルカリ</label>
+            <div class="col-7">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text px-0" style="width: 32px">
+                            <div class="mx-auto">¥</div>
+                        </div>
+                    </div>
+                    <input type="text" name="メルカリ" class="form-control price 送料込" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-5 col-form-label">ラクマ</label>
+            <div class="col-7">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text px-0" style="width: 32px">
+                            <div class="mx-auto">¥</div>
+                        </div>
+                    </div>
+                    <input type="text" name="ラクマ" class="form-control price 送料込" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-5 col-form-label">ヤフオク 送料込</label>
+            <div class="col-7">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text px-0" style="width: 32px">
+                            <div class="mx-auto">¥</div>
+                        </div>
+                    </div>
+                    <input type="text" name="ヤフオク 送料込" class="form-control price 送料込" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-5 col-form-label">ヤフオク 送料別</label>
+            <div class="col-7">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text px-0" style="width: 32px">
+                            <div class="mx-auto">¥</div>
+                        </div>
+                    </div>
+                    <input type="text" name="ヤフオク 送料別" class="form-control price 送料別" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-5 col-form-label">PayPayフリマ</label>
+            <div class="col-7">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text px-0" style="width: 32px">
+                            <div class="mx-auto">¥</div>
+                        </div>
+                    </div>
+                    <input type="text" name="PayPayフリマ" class="form-control price 送料込" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-5 col-form-label">送料</label>
+            <div class="col-7">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text px-0" style="width: 32px">
+                            <div class="mx-auto">¥</div>
+                        </div>
+                    </div>
+                    <input type="text" name="送料" class="form-control price 送料込" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+        <hr>
+    </form>
+    <div class="mt-5 text-center" style="font-size: 1rem;">Yoshinori Takai</div>
 </div>
 </html>
