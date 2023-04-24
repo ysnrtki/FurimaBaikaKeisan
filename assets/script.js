@@ -1,5 +1,5 @@
 ﻿$(() => {
-    const $fields = $("form input[name]");
+    const $priceFields = $("form input[name]");
     const fees = {
         "メルカリ": 0.1,
         "ラクマ": 0.066, // 0.06 * 1.1
@@ -7,7 +7,7 @@
         "ヤフオク 送料別": 0.088, // 0.08 * 1.1
         "PayPayフリマ": 0.05,
     };
-    $fields.toArray().forEach(input => {
+    $priceFields.toArray().forEach(input => {
         const fee = fees[$(input).attr("name")];
         if (fee) {
             const $label = $(input).closest(".form-group").find("label");
@@ -15,34 +15,35 @@
         }
     });
     const toNumber = text => ((text || "") + "").replace(/−/g, "-").replace(/[^0-9\.\-]/g, "") * 1;
-    const formatAllNumbers = () => {
-        $fields.toArray().forEach(input => {
-            let formattedNumber = formatNumber(Math.round(toNumber($(input).val())));
-            formattedNumber = formattedNumber.replace(/^[\+\-]0$/, "0");
-            $(input).val(formattedNumber);
+    const formatAllPrices = () => {
+        $priceFields.toArray().forEach(priceField => {
+            let formattedPrice = $(priceField).val().replace(/^¥/, "").replace(/^[+-]/, "");
+            formattedPrice = formatNumber(Math.round(toNumber(formattedPrice)));
+            formattedPrice = formattedPrice.replace(/^[\+\-]0$/, "0");
+            $(priceField).val(`¥${formattedPrice}`);
         });
     };
-    $fields.toArray().forEach(input => $(input).val(localStorage.getItem($(input).attr("name"))));
-    $fields.on("blur", function () {
-        formatAllNumbers();
-        const $shippingChargeField = $fields.filter("[name='送料']");
+    $priceFields.toArray().forEach(input => $(input).val(localStorage.getItem($(input).attr("name"))));
+    $priceFields.on("blur", function () {
+        formatAllPrices();
+        const $shippingChargeField = $priceFields.filter("[name='送料']");
         const shippingCharge = toNumber($shippingChargeField.val());
-        const $baseInput = $(this).is($shippingChargeField) ? $fields.filter(`[name!='${$shippingChargeField.attr("name")}']:first`) : $(this);
+        const $baseInput = $(this).is($shippingChargeField) ? $priceFields.filter(`[name!='${$shippingChargeField.attr("name")}']:first`) : $(this);
         const fee = fees[$baseInput.attr("name")];
         const basePrice = toNumber($baseInput.val()) * (1 - fee) + ($baseInput.hasClass("送料別") ? shippingCharge : 0);
         Object.keys(fees).forEach(key => {
-            const $field = $fields.filter(`[name='${key}']`);
-            if ($field.hasClass("送料込")) {
-                $field.val(basePrice / (1 - fees[key]));
+            const $priceField = $priceFields.filter(`[name='${key}']`);
+            if ($priceField.hasClass("送料込")) {
+                $priceField.val(basePrice / (1 - fees[key]));
             }
-            if ($field.hasClass("送料別")) {
-                $field.val((basePrice - shippingCharge) / (1 - fees[key]));
+            if ($priceField.hasClass("送料別")) {
+                $priceField.val((basePrice - shippingCharge) / (1 - fees[key]));
             }
         });
-        formatAllNumbers();
-        $fields.toArray().forEach(input => localStorage.setItem($(input).attr("name"), $(input).val()));
+        formatAllPrices();
+        $priceFields.toArray().forEach(input => localStorage.setItem($(input).attr("name"), $(input).val()));
     }).filter(":first").blur();
-    $fields.on("focus", function () {
+    $priceFields.on("focus", function () {
         $(this).val(toNumber($(this).val()));
         this.select();
     });
