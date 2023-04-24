@@ -17,8 +17,11 @@
     const toNumber = text => ((text || "") + "").replace(/−/g, "-").replace(/[^0-9\.\-]/g, "") * 1;
     const formatAllPrices = () => {
         $priceFields.toArray().forEach(priceField => {
-            let formattedPrice = $(priceField).val().replace(/^¥/, "").replace(/^[+-]/, "");
-            formattedPrice = formatNumber(Math.round(toNumber(formattedPrice)));
+            let formattedPrice = toNumber($(priceField).val());
+            if (formattedPrice < 0) {
+                formattedPrice = 0;
+            }
+            formattedPrice = formatNumber(Math.round(formattedPrice));
             formattedPrice = formattedPrice.replace(/^[\+\-]0$/, "0");
             $(priceField).val(`¥${formattedPrice}`);
         });
