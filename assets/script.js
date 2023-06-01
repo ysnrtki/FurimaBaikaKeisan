@@ -30,7 +30,7 @@
         const $triggerElement = $(this);
         (() => {
             $.ajax(
-                "http://queue.co.jp/cgi-bin/kawase.cgi",
+                "https://queue.co.jp/cgi-bin/kawase.cgi",
                 {
                     type: "get",
                     dataType: "json",
