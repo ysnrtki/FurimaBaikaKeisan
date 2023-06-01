@@ -55,7 +55,7 @@
 
         $priceFields.filter(".usd").toArray().forEach(field => $(field).val(toNumber($(field).val()) * usdjpy));
 
-        const $basePriceField = $priceFields.filter("[name='販売利益 (販売価格 - 手数料 - 送料)']");
+        const $basePriceField = $priceFields.filter("[name='販売利益']");
         const $domesticShippingChargeField = $priceFields.filter("[name='国内送料']");
         const domesticShippingCharge = toNumber($domesticShippingChargeField.val());
         const $overseasShippingChargeField = $priceFields.filter("[name='海外送料']");
