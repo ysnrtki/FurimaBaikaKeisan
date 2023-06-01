@@ -1,11 +1,12 @@
 ﻿$(() => {
-    const $priceFields = $("form input[name]");
+    const $priceFields = $("form input[name].price");
     const fees = {
         "メルカリ": 0.1,
         "ラクマ": 0.066, // 0.06 * 1.1
         "ヤフオク 送料込": 0.088, // 0.08 * 1.1
         "ヤフオク 送料別": 0.088, // 0.08 * 1.1
         "PayPayフリマ": 0.05,
+        "Grailed": 0.17,
     };
     $priceFields.toArray().forEach(input => {
         const fee = fees[$(input).attr("name")];
@@ -15,34 +16,75 @@
         }
     });
     const toNumber = text => ((text || "") + "").replace(/−/g, "-").replace(/[^0-9\.\-]/g, "") * 1;
-    const formatAllPrices = () => {
-        $priceFields.toArray().forEach(priceField => {
-            let formattedPrice = formatNumber(Math.round(toNumber($(priceField).val())));
-            formattedPrice = formattedPrice.replace(/^[\+\-]0$/, "0");
-            $(priceField).val(`¥${formattedPrice}`);
-        });
+    const formatPriceFieldValue = $field => {
+        let keta = $field.data("keta") * 1;
+        keta = isNumber(keta) && keta >= 0 ? keta : 0;
+        let formattedPrice = formatNumber(Math.round(toNumber($field.val()) * (keta > 0 ? 10 ** keta : 1)) / (keta > 0 ? 10 ** keta : 1), keta);
+        formattedPrice = formattedPrice.replace(/^[\+\-]0$/, "0");
+        formattedPrice = `${$field.hasClass("usd") ? "$" : "¥"}${formattedPrice}`;
+        $field.val(formattedPrice);
     };
+    const formatAllPriceFieldValues = () => $priceFields.toArray().forEach(priceField => formatPriceFieldValue($(priceField)));
     $priceFields.toArray().forEach(input => $(input).val(localStorage.getItem($(input).attr("name"))));
-    $priceFields.on("blur", function () {
-        formatAllPrices();
-        const $shippingChargeField = $priceFields.filter("[name='送料']");
-        const shippingCharge = toNumber($shippingChargeField.val());
-        const $baseInput = $(this).is($shippingChargeField) ? $priceFields.filter(`[name!='${$shippingChargeField.attr("name")}']:first`) : $(this);
-        const fee = fees[$baseInput.attr("name")];
-        const basePrice = toNumber($baseInput.val()) * (1 - fee) + ($baseInput.hasClass("送料別") ? shippingCharge : 0);
+    $priceFields.filter(":not([readonly],[disabled])").on("blur", function () {
+        const $triggerElement = $(this);
+        (() => {
+            $.ajax(
+                "http://queue.co.jp/cgi-bin/kawase.cgi",
+                {
+                    type: "get",
+                    dataType: "json",
+                    async: false,
+                },
+            )
+            .done(js => {
+                const usdjpy = js.quotes.find(quote => quote.currencyPairCode === "USDJPY");
+                $("[name='USDJPY']").val((toNumber(usdjpy.bid) + toNumber(usdjpy.ask)) / 2);
+            })
+            .fail((jqXHR, textStatus, errorThrown) => {
+                alert("USDJPYの取得に失敗しました。");
+                console.error(jqXHR);
+                console.error(textStatus);
+                console.error(errorThrown);
+            });
+        })();
+        formatAllPriceFieldValues();
+
+        const $usdjpyField = $priceFields.filter("[name='USDJPY']");
+        const usdjpy = toNumber($usdjpyField.val());
+
+        $priceFields.filter(".usd").toArray().forEach(field => $(field).val(toNumber($(field).val()) * usdjpy));
+
+        const $basePriceField = $priceFields.filter("[name='販売利益 (販売価格 - 手数料 - 送料)']");
+        const $domesticShippingChargeField = $priceFields.filter("[name='国内送料']");
+        const domesticShippingCharge = toNumber($domesticShippingChargeField.val());
+        const $overseasShippingChargeField = $priceFields.filter("[name='海外送料']");
+        const overseasShippingCharge = toNumber($overseasShippingChargeField.val());
+
+        let basePrice = toNumber($basePriceField.val());
+        if (Object.keys(fees).includes($triggerElement.attr("name"))) {
+            const fee = fees[$triggerElement.attr("name")];
+            basePrice = toNumber($triggerElement.val()) * (1 - fee);
+            if ($triggerElement.hasClass("送料込")) {
+                const shippingCharge = $triggerElement.is("[name='Grailed']") ? overseasShippingCharge : domesticShippingCharge;
+                basePrice = toNumber($triggerElement.val()) * (1 - fee) - shippingCharge;
+            }
+            $basePriceField.val(basePrice);
+        }
         Object.keys(fees).forEach(key => {
             const $priceField = $priceFields.filter(`[name='${key}']`);
+            $priceField.val(basePrice / (1 - fees[key]));
             if ($priceField.hasClass("送料込")) {
-                $priceField.val(basePrice / (1 - fees[key]));
-            }
-            if ($priceField.hasClass("送料別")) {
-                $priceField.val((basePrice - shippingCharge) / (1 - fees[key]));
+                const shippingCharge = $priceField.is("[name='Grailed']") ? overseasShippingCharge : domesticShippingCharge;
+                $priceField.val((basePrice + shippingCharge) / (1 - fees[key]));
             }
         });
-        formatAllPrices();
+        $priceFields.filter(".usd").toArray().forEach(field => $(field).val(toNumber($(field).val()) / usdjpy));
+        formatAllPriceFieldValues();
+
         $priceFields.toArray().forEach(input => localStorage.setItem($(input).attr("name"), $(input).val()));
     }).filter(":first").blur();
-    $priceFields.on("focus", function () {
+    $priceFields.filter(":not([readonly],[disabled])").on("focus", function () {
         $(this).val(toNumber($(this).val()));
         this.select();
     });

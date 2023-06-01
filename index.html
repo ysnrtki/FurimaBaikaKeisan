@@ -7,52 +7,76 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <title>フリマ売価計算</title>
 <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP" rel="stylesheet">
-<script src="./assets/vendors/jquery/jquery-3.3.1.min.js?v=20230426"></script>
-<script src="./assets/vendors/popper/popper.min.js?v=20230426"></script>
-<link href="./assets/vendors/bootstrap/css/bootstrap.min.css?v=20230426" rel="stylesheet">
-<script src="./assets/vendors/bootstrap/js/bootstrap.min.js?v=20230426"></script>
-<link href="./assets/style.css?v=20230426" rel="stylesheet">
-<script src="./assets/script.js?v=20230426"></script>
+<script src="./assets/vendors/jquery/jquery-3.3.1.min.js?v=20230601"></script>
+<script src="./assets/vendors/popper/popper.min.js?v=20230601"></script>
+<link href="./assets/vendors/bootstrap/css/bootstrap.min.css?v=20230601" rel="stylesheet">
+<script src="./assets/vendors/bootstrap/js/bootstrap.min.js?v=20230601"></script>
+<link href="./assets/style.css?v=20230601" rel="stylesheet">
+<script src="./assets/script.js?v=20230601"></script>
 </head>
 <div class="container-fluid m-0 px-4 py-5" style="width: 100%;">
     <div class="text-center" style="font-size: 1.5rem;">フリマ売価計算</div>
     <form class="mt-5">
         <hr>
         <div class="form-group row mt-2 mb-0">
+            <label class="col-7 col-form-label">販売利益 (販売価格 - 手数料 - 送料)</label>
+            <div class="col-5">
+                <input type="text" name="販売利益 (販売価格 - 手数料 - 送料)" class="form-control price" data-keta="0" inputmode="numeric">
+            </div>
+        </div>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-7 col-form-label">国内送料</label>
+            <div class="col-5">
+                <input type="text" name="国内送料" class="form-control price 送料込" data-keta="0" inputmode="numeric">
+            </div>
+        </div>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-7 col-form-label">海外送料</label>
+            <div class="col-5">
+                <input type="text" name="海外送料" class="form-control price 送料込" data-keta="0" inputmode="numeric">
+            </div>
+        </div>
+        <div class="form-group row mt-2 mb-0">
+            <label class="col-7 col-form-label">USDJPY</label>
+            <div class="col-5">
+                <input type="text" name="USDJPY" class="form-control price" data-keta="2" readonly="readonly">
+            </div>
+        </div>
+        <hr>
+        <div class="form-group row mt-2 mb-0">
             <label class="col-7 col-form-label">メルカリ</label>
             <div class="col-5">
-                <input type="text" name="メルカリ" class="form-control price 送料込" inputmode="numeric">
+                <input type="text" name="メルカリ" class="form-control price 送料込" data-keta="0" inputmode="numeric">
             </div>
         </div>
         <div class="form-group row mt-2 mb-0">
             <label class="col-7 col-form-label">ラクマ</label>
             <div class="col-5">
-                <input type="text" name="ラクマ" class="form-control price 送料込" inputmode="numeric">
+                <input type="text" name="ラクマ" class="form-control price 送料込" data-keta="0" inputmode="numeric">
             </div>
         </div>
         <div class="form-group row mt-2 mb-0">
             <label class="col-7 col-form-label">ヤフオク 送料込</label>
             <div class="col-5">
-                <input type="text" name="ヤフオク 送料込" class="form-control price 送料込" inputmode="numeric">
+                <input type="text" name="ヤフオク 送料込" class="form-control price 送料込" data-keta="0" inputmode="numeric">
             </div>
         </div>
         <div class="form-group row mt-2 mb-0">
             <label class="col-7 col-form-label">ヤフオク 送料別</label>
             <div class="col-5">
-                <input type="text" name="ヤフオク 送料別" class="form-control price 送料別" inputmode="numeric">
+                <input type="text" name="ヤフオク 送料別" class="form-control price 送料別" data-keta="0" inputmode="numeric">
             </div>
         </div>
         <div class="form-group row mt-2 mb-0">
             <label class="col-7 col-form-label">PayPayフリマ</label>
             <div class="col-5">
-                <input type="text" name="PayPayフリマ" class="form-control price 送料込" inputmode="numeric">
+                <input type="text" name="PayPayフリマ" class="form-control price 送料込" data-keta="0" inputmode="numeric">
             </div>
         </div>
-        <hr>
         <div class="form-group row mt-2 mb-0">
-            <label class="col-7 col-form-label">送料</label>
+            <label class="col-7 col-form-label">Grailed</label>
             <div class="col-5">
-                <input type="text" name="送料" class="form-control price 送料込" inputmode="numeric">
+                <input type="text" name="Grailed" class="form-control price 送料込 usd" data-keta="0" inputmode="numeric">
             </div>
         </div>
         <hr>
