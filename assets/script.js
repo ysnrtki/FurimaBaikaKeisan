@@ -8,10 +8,10 @@
         "PayPayフリマ": 0.05,
         "Grailed": 0.17,
     };
-    $priceFields.toArray().forEach(input => {
-        const fee = fees[$(input).attr("name")];
+    $priceFields.toArray().forEach(field => {
+        const fee = fees[$(field).attr("name")];
         if (fee) {
-            const $label = $(input).closest(".form-group").find("label");
+            const $label = $(field).closest(".form-group").find("label");
             $label.text(`${$label.text()} (${fee})`);
         }
     });
@@ -24,7 +24,6 @@
         formattedPrice = `${$field.hasClass("usd") ? "$" : "¥"}${formattedPrice}`;
         $field.val(formattedPrice);
     };
-    const formatAllPriceFieldValues = () => $priceFields.toArray().forEach(priceField => formatPriceFieldValue($(priceField)));
     $priceFields.toArray().forEach(input => $(input).val(localStorage.getItem($(input).attr("name"))));
     $priceFields.filter(":not([readonly],[disabled])").on("blur", function () {
         const $triggerElement = $(this);
@@ -48,7 +47,7 @@
                 console.error(errorThrown);
             });
         })();
-        formatAllPriceFieldValues();
+        $priceFields.toArray().forEach(priceField => formatPriceFieldValue($(priceField)));
 
         const $usdjpyField = $priceFields.filter("[name='USDJPY']");
         const usdjpy = toNumber($usdjpyField.val());
@@ -80,7 +79,7 @@
             }
         });
         $priceFields.filter(".usd").toArray().forEach(field => $(field).val(toNumber($(field).val()) / usdjpy));
-        formatAllPriceFieldValues();
+        $priceFields.toArray().forEach(priceField => formatPriceFieldValue($(priceField)));
 
         $priceFields.toArray().forEach(input => localStorage.setItem($(input).attr("name"), $(input).val()));
     }).filter(":first").blur();
