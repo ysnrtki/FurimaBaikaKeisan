@@ -7,6 +7,7 @@ $(() => {
         "ヤフオク 送料別": 0.1,
         "PayPayフリマ": 0.05,
         "Grailed": 0.17,
+        "eBay": 0.2,
     };
     $priceFields.toArray().forEach(field => {
         const fee = fees[$(field).attr("name")];
@@ -65,7 +66,7 @@ $(() => {
             const fee = fees[$triggerElement.attr("name")];
             basePrice = toNumber($triggerElement.val()) * (1 - fee);
             if ($triggerElement.hasClass("送料込")) {
-                const shippingCharge = $triggerElement.is("[name='Grailed']") ? overseasShippingCharge : domesticShippingCharge;
+                const shippingCharge = $triggerElement.is("[name='Grailed'], [name='eBay']") ? overseasShippingCharge : domesticShippingCharge;
                 basePrice = toNumber($triggerElement.val()) * (1 - fee) - shippingCharge;
             }
             $basePriceField.val(basePrice);
@@ -74,7 +75,7 @@ $(() => {
             const $priceField = $priceFields.filter(`[name='${key}']`);
             $priceField.val(basePrice / (1 - fees[key]));
             if ($priceField.hasClass("送料込")) {
-                const shippingCharge = $priceField.is("[name='Grailed']") ? overseasShippingCharge : domesticShippingCharge;
+                const shippingCharge = $priceField.is("[name='Grailed'], [name='eBay']") ? overseasShippingCharge : domesticShippingCharge;
                 $priceField.val((basePrice + shippingCharge) / (1 - fees[key]));
             }
         });
